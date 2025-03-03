@@ -19,5 +19,4 @@ public class DataCentreVo {
 	private String address;
 	private boolean active;
 	private boolean visible;
-
 }
