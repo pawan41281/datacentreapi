@@ -3,8 +3,11 @@ package colt.net.datacentreapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import colt.net.datacentreapi.controller.DataCentreController;
 import colt.net.datacentreapi.dao.DataCentreDao;
 import colt.net.datacentreapi.dto.DataCentreDto;
 import colt.net.datacentreapi.exception.ResourceAlreadyExistsException;
@@ -15,6 +18,8 @@ import colt.net.datacentreapi.vo.DataCentreVo;
 @Service
 public class DataCentreServiceImpl implements DataCentreService {
 
+	private static final Logger logger = LoggerFactory.getLogger(DataCentreServiceImpl.class);
+	
 	private final DataCentreDao dataCentreDao;
 	private final DataCentreModelMapper dataCentreModelMapper;
 
@@ -25,7 +30,11 @@ public class DataCentreServiceImpl implements DataCentreService {
 
 	@Override
 	public List<DataCentreVo> list() {
-		return dataCentreModelMapper.convertDtoList(dataCentreDao.findAll());
+		logger.info("dao layer call start for Get all datacentres");
+		List<DataCentreDto> dtoList = dataCentreDao.findAll();
+		List<DataCentreVo> voList = dataCentreModelMapper.convertDtoList(dtoList);
+		logger.info("dao layer call done for Get all datacentres");
+		return voList;
 	}
 
 	@Override

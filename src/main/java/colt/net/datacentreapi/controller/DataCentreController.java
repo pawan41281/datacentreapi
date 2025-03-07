@@ -3,6 +3,8 @@ package colt.net.datacentreapi.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class DataCentreController {
 
 	private final DataCentreService dataCentreService;
+	private static final Logger logger = LoggerFactory.getLogger(DataCentreController.class);
 
 	public DataCentreController(DataCentreService dataCentreService) {
 		this.dataCentreService = dataCentreService;
@@ -36,7 +39,10 @@ public class DataCentreController {
 	@GetMapping("")
 	@Operation(summary = "Get all datacentres", description = "Fetches all datacentres from database")
 	public ResponseEntity<ApiResponse<List<DataCentreVo>>> list() {
+		logger.info("api call for Get all datacentres");
+		logger.info("Calling service layer");
 		List<DataCentreVo> list = dataCentreService.list();
+		logger.info("Service layer call finish");
 //		ApiResponse<List<DataCentreVo>> apiResponse = new ApiResponse<>("success", "Record retrieved successfully", list, null);
 //		return ResponseEntity.ok(apiResponse);
 		return ResponseEntity.ok(
