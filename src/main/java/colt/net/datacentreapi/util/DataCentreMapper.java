@@ -10,11 +10,11 @@ import colt.net.datacentreapi.dto.DataCentreDto;
 import colt.net.datacentreapi.vo.DataCentreVo;
 
 @Component
-public class DataCentreModelMapper {
+public class DataCentreMapper {
 	
-	private final ModelMapper modelMapper;
+	private final ModelMapper modelMapper; 
 	
-	public DataCentreModelMapper(ModelMapper modelMapper) {
+	public DataCentreMapper(ModelMapper modelMapper) {
 		this.modelMapper=modelMapper;
 	}
 

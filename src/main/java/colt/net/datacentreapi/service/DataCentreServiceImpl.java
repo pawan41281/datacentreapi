@@ -7,12 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import colt.net.datacentreapi.controller.DataCentreController;
 import colt.net.datacentreapi.dao.DataCentreDao;
 import colt.net.datacentreapi.dto.DataCentreDto;
 import colt.net.datacentreapi.exception.ResourceAlreadyExistsException;
 import colt.net.datacentreapi.exception.ResourceNotFoundException;
-import colt.net.datacentreapi.util.DataCentreModelMapper;
+import colt.net.datacentreapi.util.DataCentreMapper;
 import colt.net.datacentreapi.vo.DataCentreVo;
 
 @Service
@@ -21,18 +20,18 @@ public class DataCentreServiceImpl implements DataCentreService {
 	private static final Logger logger = LoggerFactory.getLogger(DataCentreServiceImpl.class);
 	
 	private final DataCentreDao dataCentreDao;
-	private final DataCentreModelMapper dataCentreModelMapper;
+	private final DataCentreMapper dataCentreMapper;
 
-	public DataCentreServiceImpl(DataCentreDao dataCentreDao, DataCentreModelMapper dataCentreModelMapper) {
+	public DataCentreServiceImpl(DataCentreDao dataCentreDao, DataCentreMapper dataCentreMapper) {
 		this.dataCentreDao = dataCentreDao;
-		this.dataCentreModelMapper = dataCentreModelMapper;
+		this.dataCentreMapper = dataCentreMapper;
 	}
 
 	@Override
 	public List<DataCentreVo> list() {
 		logger.info("dao layer call start for Get all datacentres");
 		List<DataCentreDto> dtoList = dataCentreDao.findAll();
-		List<DataCentreVo> voList = dataCentreModelMapper.convertDtoList(dtoList);
+		List<DataCentreVo> voList = dataCentreMapper.convertDtoList(dtoList);
 		logger.info("dao layer call done for Get all datacentres");
 		return voList;
 	}
@@ -43,23 +42,23 @@ public class DataCentreServiceImpl implements DataCentreService {
 		if (dataCentreDto.isEmpty())
 			throw new ResourceNotFoundException("Record not found with Id " + id);
 
-		DataCentreVo dataCentreVo = dataCentreModelMapper.convert(dataCentreDto.get());
+		DataCentreVo dataCentreVo = dataCentreMapper.convert(dataCentreDto.get());
 		return dataCentreVo;
 	}
 
 	@Override
 	public DataCentreVo save(DataCentreVo dataCentreVo) throws ResourceAlreadyExistsException {
-		DataCentreDto dataCentreDto = dataCentreModelMapper.convert(dataCentreVo);
+		DataCentreDto dataCentreDto = dataCentreMapper.convert(dataCentreVo);
 		dataCentreDto = dataCentreDao.save(dataCentreDto);
-		dataCentreVo = dataCentreModelMapper.convert(dataCentreDto);
+		dataCentreVo = dataCentreMapper.convert(dataCentreDto);
 		return dataCentreVo;
 	}
 
 	@Override
 	public DataCentreVo update(DataCentreVo dataCentreVo) throws ResourceNotFoundException {
-		DataCentreDto dataCentreDto = dataCentreModelMapper.convert(dataCentreVo);
+		DataCentreDto dataCentreDto = dataCentreMapper.convert(dataCentreVo);
 		dataCentreDto = dataCentreDao.save(dataCentreDto);
-		dataCentreVo = dataCentreModelMapper.convert(dataCentreDto);
+		dataCentreVo = dataCentreMapper.convert(dataCentreDto);
 		return dataCentreVo;
 	}
 

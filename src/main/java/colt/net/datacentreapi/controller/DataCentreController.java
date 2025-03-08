@@ -21,6 +21,7 @@ import colt.net.datacentreapi.service.DataCentreService;
 import colt.net.datacentreapi.vo.DataCentreVo;
 import colt.net.datacentreapi.wrapper.ApiResponse;
 import colt.net.datacentreapi.wrapper.ApiResponseWrapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -37,6 +38,7 @@ public class DataCentreController {
 	}
 
 	@GetMapping("")
+	@CircuitBreaker(name="CircuitBreakerDataCentreAPI", fallbackMethod = "getErrors")
 	@Operation(summary = "Get all datacentres", description = "Fetches all datacentres from database")
 	public ResponseEntity<ApiResponse<List<DataCentreVo>>> list() {
 		logger.info("api call for Get all datacentres");
@@ -47,6 +49,11 @@ public class DataCentreController {
 //		return ResponseEntity.ok(apiResponse);
 		return ResponseEntity.ok(
 				ApiResponseWrapper.success("Record retrieved successfully", list, Map.of("recordCount", list.size())));
+	}
+	
+	public ResponseEntity<ApiResponse<List<DataCentreVo>>> getErrors(Throwable throwable){
+		return ResponseEntity.ok(
+				ApiResponseWrapper.error("Service is down", null));
 	}
 
 	@GetMapping("/{id}")
